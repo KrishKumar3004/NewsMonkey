@@ -3,6 +3,16 @@ import PropTypes from "prop-types";
 import NewsItem from "./NewsItem";
 
 export class News extends Component {
+  static defaultProps = {
+    country: "in",
+    pageSize: 6,
+    category: "general",
+  };
+  static propTypes = {
+    country: PropTypes.string,
+    pageSize: PropTypes.number,
+    category: PropTypes.string,
+  };
   constructor() {
     super();
     this.state = {
@@ -11,9 +21,9 @@ export class News extends Component {
       page: 1,
     };
   }
-  async componentDidMount() {
+  async update() {
     this.setState({ loading: true });
-    let url = `https://newsapi.org/v2/top-headlines?country=in&apiKey=c257cbe3e4b64a21923bc66b5b0836e9&pageSize=${this.props.pageSize}`;
+    let url = `https://newsapi.org/v2/top-headlines?country=in&category=${this.props.category}&apikey=c257cbe3e4b64a21923bc66b5b0836e9&pageSize=${this.props.pageSize}&page=${this.state.page}`;
     let data = await fetch(url);
     let parsedData = await data.json();
     //console.log(parsedData);
@@ -23,39 +33,17 @@ export class News extends Component {
       loading: false,
     });
   }
+  componentDidMount() {
+    this.update();
+  }
   handlePrev = async () => {
-    if (this.state.page > 1) {
-      this.setState({ loading: true });
-      let url = `https://newsapi.org/v2/top-headlines?country=in&apiKey=c257cbe3e4b64a21923bc66b5b0836e9&pageSize=${
-        this.props.pageSize
-      }&page=${this.state.page - 1}`;
-      let data = await fetch(url);
-      let parsedData = await data.json();
-      this.setState({
-        page: this.state.page - 1,
-        articles: parsedData.articles,
-        loading: false,
-      });
-    }
+    this.setState({ page: this.state.page - 1 });
+    this.update();
   };
 
   handleNext = async () => {
-    if (
-      this.state.page + 1 <=
-      Math.ceil(this.state.totalResults / this.props.pageSize)
-    ) {
-      this.setState({ loading: true });
-      let url = `https://newsapi.org/v2/top-headlines?country=in&apiKey=c257cbe3e4b64a21923bc66b5b0836e9&pageSize=${
-        this.props.pageSize
-      }&page=${this.state.page + 1}`;
-      let data = await fetch(url);
-      let parsedData = await data.json();
-      this.setState({
-        page: this.state.page + 1,
-        articles: parsedData.articles,
-        loading: false,
-      });
-    }
+    this.setState({ page: this.state.page + 1 });
+    this.update();
   };
 
   render() {
@@ -78,6 +66,9 @@ export class News extends Component {
                     description={element.description}
                     imageUrl={element.urlToImage}
                     newsUrl={element.url}
+                    author={element.author}
+                    date={element.publishedAt}
+                    source={element.source.name}
                   />
                 </div>
               );
