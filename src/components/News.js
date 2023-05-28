@@ -29,9 +29,13 @@ const News = (props) => {
   }, []);
 
   const fetchMoreData = async () => {
+    const url = `https://newsapi.org/v2/top-headlines?country=${
+      props.country
+    }&category=${props.category}&apiKey=1e9f24e5c5d541da8a954031ee57d460&page=${
+      page + 1
+    }&pageSize=${props.pageSize}`;
     setPage(page + 1);
     setLoading(true);
-    const url = `https://newsapi.org/v2/top-headlines?country=${props.country}&category=${props.category}&apiKey=1e9f24e5c5d541da8a954031ee57d460&page=${page}&pageSize=${props.pageSize}`;
     let data = await fetch(url);
     let parsedData = await data.json();
     setArticles(articles.concat(parsedData.articles));
@@ -41,7 +45,7 @@ const News = (props) => {
 
   return (
     <>
-      <h1 className="text-center" style={{ margin: "35px 0px" }}>
+      <h1 className="text-center" style={{ margin: "80px 0px" }}>
         NewsMonkey - Top {capitalizeFirstLetter(props.category)} Headlines
       </h1>
       {loading && (

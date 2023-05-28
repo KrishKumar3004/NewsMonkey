@@ -7,7 +7,7 @@ const NewsItem = (props) => {
       <div className="card">
         <div className="img-div">
           <span
-            class="badge rounded-pill bg-dark"
+            className="badge rounded-pill bg-dark"
             style={{ position: "absolute", right: "0", top: "0" }}
           >
             {source}
