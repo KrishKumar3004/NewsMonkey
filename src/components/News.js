@@ -45,7 +45,14 @@ const News = (props) => {
 
   return (
     <>
-      <h1 className="text-center" style={{ margin: "80px 0px" }}>
+      <h1
+        style={{
+          textAlign: "center",
+          margin: "80px auto 15px",
+          color: "white",
+          fontFamily: "'Bebas Neue', sans-serif",
+        }}
+      >
         NewsMonkey - Top {capitalizeFirstLetter(props.category)} Headlines
       </h1>
       {loading && (
@@ -73,7 +80,9 @@ const News = (props) => {
                   <NewsItem
                     title={element.title ? element.title : ""}
                     description={element.description ? element.description : ""}
-                    imageUrl={element.urlToImage}
+                    imageUrl={
+                      element.urlToImage ? element.urlToImage : "/img.jpeg"
+                    }
                     newsUrl={element.url}
                     author={element.author}
                     date={element.publishedAt}
